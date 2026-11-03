@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa di Baron — Marone, Lago d'Iseo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+
+        /* ─── ZMIENNE ─── */
+        :root {
+            --ink:          #141B22;
+            --ink-mid:      #2D3B47;
+            --muted:        #7A8490;
+            --sage:         #4A5E45;
+            --sage-light:   #6B7F66;
+            --stone:        #F4F0E8;
+            --stone-dark:   #EAE5DA;
+            --white:        #FDFCFA;
+            --border:       #D8D2C6;
+            --border-light: #EAE5DA;
+        }
+
+        /* ─── RESET ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--ink);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { display: block; max-width: 100%; }
+
+        /* ─── NAWIGACJA ─── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            height: 64px;
+            padding: 0 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(253, 252, 250, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(216, 210, 198, 0.6);
+        }
+
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--sage); }
+
+        .nav-cta {
+            background: var(--ink) !important;
+            color: var(--white) !important;
+            padding: 9px 22px;
+            border-radius: 2px;
+            letter-spacing: 0.14em !important;
+        }
+
+        /* ─── PRZEŁĄCZNIK JĘZYKA ─── */
+        /* Na razie wyłącznie element wizualny — nie zmienia treści strony. */
+        .lang-switcher {
+            position: relative;
+            list-style: none;
+        }
+
+        .lang-current {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .lang-current:hover,
+        .lang-switcher.open .lang-current { color: var(--sage); }
+
+        .lang-chevron {
+            flex-shrink: 0;
+            color: currentColor;
+            transition: transform 0.2s;
+        }
+
+        .lang-switcher.open .lang-chevron { transform: rotate(180deg); }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 20px);
+            right: 0;
+            min-width: 152px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 16px 40px rgba(20, 27, 34, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+        }
+
+        .lang-switcher.open .lang-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            padding: 13px 18px;
+            font-size: 0.78rem;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            color: var(--ink-mid);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .lang-option:last-child { border-bottom: none; }
+        .lang-option:hover { background: var(--stone); color: var(--ink); }
+
+        .lang-option.active {
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        /* ─── HERO ─── */
+        #hero {
+            position: relative;
+            height: 100vh;
+            min-height: 640px;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 80px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-color: var(--ink);
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Lago_d%27Iseo_da_Montecolo.jpg/1920px-Lago_d%27Iseo_da_Montecolo.jpg');
+            background-size: cover;
+            background-position: center 35%;
+            transform: scale(1.03);
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                160deg,
+                rgba(20, 27, 34, 0.08) 0%,
+                rgba(20, 27, 34, 0.55) 55%,
+                rgba(20, 27, 34, 0.82) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 60px;
+            max-width: 860px;
+            color: var(--white);
+        }
+
+        .hero-location {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.58);
+            margin-bottom: 18px;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(4rem, 8.5vw, 7rem);
+            font-weight: 300;
+            line-height: 0.95;
+            letter-spacing: -0.01em;
+            margin-bottom: 22px;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .hero-desc {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.72);
+            letter-spacing: 0.02em;
+            max-width: 400px;
+            margin-bottom: 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--white);
+            color: var(--ink);
+            padding: 14px 40px;
+            text-decoration: none;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        .btn-ghost {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding-bottom: 2px;
+        }
+
+        .hero-meta {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            z-index: 2;
+            display: flex;
+            gap: 28px;
+        }
+
+        .hero-stat {
+            text-align: right;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .hero-stat-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--white);
+            line-height: 1;
+            display: block;
+        }
+
+        .hero-stat-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .hero-sep {
+            width: 1px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            align-self: center;
+        }
+
+        /* ─── SEKCJE BAZOWE ─── */
+        section {
+            padding: 112px 60px;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .label {
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.26em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+
+        .heading em { font-style: italic; }
+
+        .rule {
+            width: 40px;
+            height: 1px;
+            background: var(--sage);
+            margin-bottom: 36px;
+        }
+
+        .lead {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--muted);
+            max-width: 520px;
+            line-height: 1.9;
+            margin-bottom: 52px;
+        }
+
+        /* ─── O NAS ─── */
+        #o-nas { background: var(--white); }
+
+        .o-nas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 96px;
+            align-items: center;
+        }
+
+        .o-nas-text p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--muted);
+            margin-bottom: 16px;
+            line-height: 1.85;
+        }
+
+        .signature {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.45rem;
+            font-weight: 400;
+            color: var(--sage);
+            margin-top: 36px;
+            display: block;
+        }
+
+        .frame {
+            background: var(--stone);
+            aspect-ratio: 4/5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--border);
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            border: 1px solid var(--border-light);
+        }
+
+        .frame-line {
+            width: 1px;
+            height: 36px;
+            background: var(--border);
+        }
+
+        /* ─── O APARTAMENCIE ─── */
+        #o-apartamencie { background: var(--stone); }
+
+        .apt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 88px;
+            align-items: start;
+        }
+
+        .amenities {
+            border-top: 1px solid var(--border);
+            margin-bottom: 48px;
+        }
+
+        .amenity-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .amenity-name {
+            font-size: 0.88rem;
+            font-weight: 400;
+            color: var(--ink-mid);
+        }
+
+        .amenity-detail {
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        .highlight {
+            border: 1px solid var(--border);
+            padding: 32px 36px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .highlight-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--sage);
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .highlight-text-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .highlight-text-sub {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: var(--muted);
+        }
+
+        .apt-photos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .apt-photos .frame:first-child {
+            grid-column: 1 / -1;
+            aspect-ratio: 16/9;
+        }
+
+        .apt-photos .frame:not(:first-child) {
+            aspect-ratio: 4/3;
+        }
+
+        /* ─── GALERIA ─── */
+        #galeria { background: var(--white); }
+
+        .gallery-filters {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 44px;
+        }
+
+        .gallery-filter {
+            font-size: 0.64rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 8px 18px;
+            border: 1px solid var(--border-light);
+            background: transparent;
+            cursor: default;
+        }
+
+        .gallery-filter.active {
+            color: var(--white);
+            background: var(--ink);
+            border-color: var(--ink);
+        }
+
+        .gallery-mosaic {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 120px;
+            gap: 5px;
+        }
+
+        .gallery-cell {
+            background: var(--stone);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-cell-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: var(--ink-mid);
+            font-weight: 400;
+            text-align: center;
+            padding: 0 12px;
+        }
+
+        .gallery-cell-sub {
+            font-size: 0.58rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--border);
+        }
+
+        /* Mozaikowe rozmiary — siatka 12-kolumnowa */
+        .gc-hero       { grid-column: span 8; grid-row: span 2; }
+        .gc-tall       { grid-column: span 4; grid-row: span 2; }
+        .gc-wide       { grid-column: span 6; grid-row: span 2; }
+        .gc-medium     { grid-column: span 4; grid-row: span 2; }
+        .gc-third      { grid-column: span 4; grid-row: span 2; }
+        .gc-half       { grid-column: span 6; grid-row: span 2; }
+        .gc-full       { grid-column: span 12; grid-row: span 1; }
+        .gc-small      { grid-column: span 3; grid-row: span 2; }
+
+        .gallery-footer {
+            margin-top: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .gallery-footer-text {
+            font-size: 0.78rem;
+            font-weight: 300;
+            color: var(--muted);
+        }
+
+        .gallery-footer-count {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        /* ─── MARONE ─── */
+        #marone { background: var(--ink); color: var(--white); }
+        #marone .label { color: rgba(255,255,255,0.4); }
+        #marone .heading { color: var(--white); }
+        #marone .lead { color: rgba(255,255,255,0.45); }
+        #marone .rule { background: rgba(255,255,255,0.2); }
+
+        .marone-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 88px;
+        }
+
+        .dist-table {
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .dist-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .dist-name { font-size: 0.9rem; font-weight: 300; color: rgba(255,255,255,0.75); }
+
+        .dist-val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+        }
+
+        .attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+        }
+
+        .attr-item {
+            background: rgba(255,255,255,0.03);
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .attr-item-label {
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sage-light);
+            margin-bottom: 8px;
+        }
+
+        .attr-item-text {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.65;
+        }
+
+        /* ─── BLOG ─── */
+        #blog { background: var(--white); }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border-light);
+            border: 1px solid var(--border-light);
+            margin-bottom: 48px;
+        }
+
+        .blog-card { background: var(--white); }
+
+        .blog-img {
+            aspect-ratio: 16/10;
+            background: var(--stone);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .blog-img-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--border);
+        }
+
+        .blog-body { padding: 28px; }
+
+        .blog-cat {
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 10px;
+        }
+
+        .blog-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1.35;
+            margin-bottom: 12px;
+        }
+
+        .blog-excerpt {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            color: var(--border);
+            text-transform: uppercase;
+        }
+
+        .blog-footer { text-align: center; }
+
+        .btn-outline {
+            display: inline-block;
+            border: 1px solid var(--ink);
+            color: var(--ink);
+            padding: 13px 40px;
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border-radius: 2px;
+        }
+
+        /* ─── KALENDARZ ─── */
+        #kalendarz { background: var(--stone); }
+
+        .cal-frame {
+            border: 1px solid var(--border);
+            background: var(--white);
+            padding: 100px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cal-corner {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-color: var(--sage);
+            border-style: solid;
+        }
+
+        .cal-corner.tl { top: 24px; left: 24px; border-width: 1px 0 0 1px; }
+        .cal-corner.tr { top: 24px; right: 24px; border-width: 1px 1px 0 0; }
+        .cal-corner.bl { bottom: 24px; left: 24px; border-width: 0 0 1px 1px; }
+        .cal-corner.br { bottom: 24px; right: 24px; border-width: 0 1px 1px 0; }
+
+        .cal-heading {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 300;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .cal-sub {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--muted);
+            max-width: 440px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ─── KONTAKT ─── */
+        #kontakt { background: var(--white); }
+
+        .kontakt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 96px;
+            align-items: start;
+        }
+
+        .contact-info { border-top: 1px solid var(--border); }
+
+        .contact-row {
+            display: flex;
+            gap: 24px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .contact-row-label {
+            font-size: 0.66rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--sage);
+            width: 100px;
+            flex-shrink: 0;
+            padding-top: 3px;
+        }
+
+        .contact-row-value {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--ink-mid);
+            line-height: 1.6;
+        }
+
+        .contact-row-note {
+            font-size: 0.75rem;
+            color: var(--border);
+            margin-top: 2px;
+        }
+
+        /* formularz */
+        .form { display: flex; flex-direction: column; gap: 0; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            margin: -1px 0 0 -1px;
+        }
+
+        .form-field label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--sage);
+            padding: 14px 16px 0;
+        }
+
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
+            border: none;
+            padding: 6px 16px 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: var(--ink);
+            background: transparent;
+            outline: none;
+            resize: none;
+            -webkit-appearance: none;
+        }
+
+        .form-field.full { grid-column: 1 / -1; }
+
+        .form-field textarea { min-height: 110px; }
+
+        .form-submit {
+            background: var(--ink);
+            color: var(--white);
+            border: none;
+            padding: 16px 40px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 24px;
+            border-radius: 2px;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--ink);
+            color: rgba(255,255,255,0.4);
+            padding: 72px 60px 40px;
+        }
+
+        .footer-inner { max-width: 1200px; margin: 0 auto; }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 72px;
+            padding-bottom: 56px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 300;
+            color: var(--white);
+            margin-bottom: 14px;
+            letter-spacing: 0.03em;
+        }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            font-weight: 300;
+            line-height: 1.75;
+        }
+
+        .footer-col-title {
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+            margin-bottom: 22px;
+        }
+
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+
+        .footer-links a {
+            text-decoration: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+        }
+
+        .footer-bottom a { color: rgba(255,255,255,0.3); text-decoration: none; }
+
+    </style>
+</head>
+<body>
+
+<!-- ── NAWIGACJA ── -->
+<nav>
+    <a href="#" class="nav-logo">Casa di Baron</a>
+    <ul class="nav-links">
+        <li><a href="#o-nas">O Nas</a></li>
+        <li><a href="#o-apartamencie">Apartament</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#marone">Marone</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li class="lang-switcher" id="langSwitcher">
+            <button type="button" class="lang-current" id="langToggle" aria-haspopup="true" aria-expanded="false">
+                <span id="langCurrentCode">PL</span>
+                <svg class="lang-chevron" width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 2.5L4 5.5L7 2.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <ul class="lang-dropdown" id="langDropdown" role="menu">
+                <li class="lang-option active" data-code="PL" role="menuitem">Polski</li>
+                <li class="lang-option" data-code="EN" role="menuitem">English</li>
+                <li class="lang-option" data-code="DE" role="menuitem">Deutsch</li>
+                <li class="lang-option" data-code="IT" role="menuitem">Italiano</li>
+            </ul>
+        </li>
+        <li><a href="#kalendarz" class="nav-cta">Rezerwacja</a></li>
+    </ul>
+</nav>
+
+
+<!-- ── HERO ── -->
+<section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content">
+        <p class="hero-location">Marone &nbsp;—&nbsp; Lago d'Iseo &nbsp;—&nbsp; Lombardia</p>
+        <h1 class="hero-title">Casa<br><em>di Baron</em></h1>
+        <p class="hero-desc">Apartament z własnym ogrodem w centrum Marone, 300 metrów od jeziora.</p>
+        <div class="hero-actions">
+            <a href="#kalendarz" class="btn-primary">Sprawdź dostępność</a>
+            <a href="#o-apartamencie" class="btn-ghost">Poznaj apartament</a>
+        </div>
+    </div>
+
+    <div class="hero-meta">
+        <div class="hero-stat">
+            <span class="hero-stat-value">7</span>
+            <span class="hero-stat-label">Osób</span>
+        </div>
+        <div class="hero-sep"></div>
+        <div class="hero-stat">
+            <span class="hero-stat-value">3</span>
+            <span class="hero-stat-label">Sypialnie</span>
+        </div>
+        <div class="hero-sep"></div>
+        <div class="hero-stat">
+            <span class="hero-stat-value">300m</span>
+            <span class="hero-stat-label">Do jeziora</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── O NAS ── -->
+<section id="o-nas">
+    <div class="section-inner">
+        <div class="o-nas-grid">
+
+            <div>
+                <span class="label">Nasza historia</span>
+                <h2 class="heading">O <em>Nas</em></h2>
+                <div class="rule"></div>
+                <p class="lead">Kim jesteśmy i dlaczego zdecydowaliśmy się podzielić tym miejscem.</p>
+
+                <p>Tu pojawi się historia rodziny — skąd jesteście, co łączy Was z Marone i dlaczego pokochaliście Lago d'Iseo. Autentyczna narracja buduje zaufanie gości na długo przed przyjazdem.</p>
+                <p>Możecie opowiedzieć o pierwszym pobycie nad tym jeziorem, o remoncie, o tym, czego życzycie gościom podczas pobytu.</p>
+                <p>Jesteście dostępni, chętnie pomagacie — restauracje, szlaki, lokalne smaki. Każdy detal buduje relację zanim gość postawi stopę w progu.</p>
+
+                <span class="signature">— Rodzina Baron</span>
+            </div>
+
+            <div class="frame">
+                <div class="frame-line"></div>
+                <span>Zdjęcie rodziny</span>
+                <div class="frame-line"></div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ── O APARTAMENCIE ── -->
+<section id="o-apartamencie">
+    <div class="section-inner">
+        <span class="label">Nieruchomość</span>
+        <h2 class="heading">O <em>Apartamencie</em></h2>
+        <div class="rule"></div>
+
+        <div class="apt-grid">
+
+            <div>
+                <p class="lead">Parter, ogród, centrum Marone. Mieszkanie po generalnym remoncie na ulicy Borgonuovo.</p>
+
+                <div class="amenities">
+                    <div class="amenity-row">
+                        <span class="amenity-name">Sypialnie</span>
+                        <span class="amenity-detail">3 pokoje</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Maksymalna liczba gości</span>
+                        <span class="amenity-detail">7 osób</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Piętro</span>
+                        <span class="amenity-detail">Parter</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Ogród</span>
+                        <span class="amenity-detail">Własny, prywatny</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Kuchnia</span>
+                        <span class="amenity-detail">Pełna, wyposażona</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Łazienka</span>
+                        <span class="amenity-detail">1 łazienka</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Klimatyzacja</span>
+                        <span class="amenity-detail">W każdym pokoju</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Stan techniczny</span>
+                        <span class="amenity-detail">Po generalnym remoncie</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Stacja kolejowa</span>
+                        <span class="amenity-detail">400 m (Marone-Zone)</span>
+                    </div>
+                    <div class="amenity-row">
+                        <span class="amenity-name">Plaża</span>
+                        <span class="amenity-detail">500 m</span>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <span class="highlight-num">300m</span>
+                    <div>
+                        <div class="highlight-text-label">do Jeziora Iseo</div>
+                        <div class="highlight-text-sub">Spacer brzegiem jeziora tuż za rogiem</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="apt-photos">
+                <div class="frame">
+                    <div class="frame-line"></div>
+                    <span>Zdjęcie główne</span>
+                    <div class="frame-line"></div>
+                </div>
+                <div class="frame">
+                    <span>Salon</span>
+                </div>
+                <div class="frame">
+                    <span>Ogród</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ── GALERIA ZDJĘĆ ── -->
+<section id="galeria">
+    <div class="section-inner">
+        <span class="label">Fotografie</span>
+        <h2 class="heading">Galeria <em>Apartamentu</em></h2>
+        <div class="rule"></div>
+        <p class="lead">Poznaj każdy zakątek Casa di Baron — wnętrza po remoncie, sypialnie i prywatny ogród.</p>
+
+        <!-- Kategorie filtrów -->
+        <div class="gallery-filters">
+            <span class="gallery-filter active">Wszystkie</span>
+            <span class="gallery-filter">Salon i Kuchnia</span>
+            <span class="gallery-filter">Sypialnia 1</span>
+            <span class="gallery-filter">Sypialnia 2</span>
+            <span class="gallery-filter">Sypialnia 3</span>
+            <span class="gallery-filter">Łazienka</span>
+            <span class="gallery-filter">Ogród</span>
+            <span class="gallery-filter">Widoki i Okolica</span>
+        </div>
+
+        <!-- Mozaika zdjęć — siatka 12-kolumnowa -->
+        <div class="gallery-mosaic">
+            <!-- Rząd 1: duże hero + wysoki bok -->
+            <div class="gallery-cell gc-hero">
+                <div class="frame-line"></div>
+                <div class="gallery-cell-label">Salon z widokiem na ogród</div>
+                <div class="gallery-cell-sub">Przestrzeń dzienna</div>
+            </div>
+            <div class="gallery-cell gc-tall">
+                <div class="gallery-cell-label">Kuchnia</div>
+                <div class="gallery-cell-sub">W pełni wyposażona</div>
+            </div>
+
+            <!-- Rząd 2: trzy równe -->
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Sypialnia główna</div>
+                <div class="gallery-cell-sub">Łóżko podwójne · Klimatyzacja</div>
+            </div>
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Druga sypialnia</div>
+                <div class="gallery-cell-sub">Podwójne łóżko · Szafa</div>
+            </div>
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Trzecia sypialnia</div>
+                <div class="gallery-cell-sub">Miejsca dla 3 osób</div>
+            </div>
+
+            <!-- Rząd 3: panorama ogrodu -->
+            <div class="gallery-cell gc-wide">
+                <div class="frame-line"></div>
+                <div class="gallery-cell-label">Prywatny ogród</div>
+                <div class="gallery-cell-sub">Zieleń · Meble ogrodowe · Relaks</div>
+            </div>
+            <div class="gallery-cell gc-wide">
+                <div class="frame-line"></div>
+                <div class="gallery-cell-label">Strefa wypoczynku w ogrodzie</div>
+                <div class="gallery-cell-sub">Grill · Wieczory pod gwiazdami</div>
+            </div>
+
+            <!-- Rząd 4: cztery małe -->
+            <div class="gallery-cell gc-small">
+                <div class="gallery-cell-label">Łazienka</div>
+                <div class="gallery-cell-sub">Po remoncie</div>
+            </div>
+            <div class="gallery-cell gc-small">
+                <div class="gallery-cell-label">Przedpokój</div>
+                <div class="gallery-cell-sub">Wejście</div>
+            </div>
+            <div class="gallery-cell gc-small">
+                <div class="gallery-cell-label">Jadalnia</div>
+                <div class="gallery-cell-sub">Stół 6-osobowy</div>
+            </div>
+            <div class="gallery-cell gc-small">
+                <div class="gallery-cell-label">Detale wnętrza</div>
+                <div class="gallery-cell-sub">Wykończenie</div>
+            </div>
+
+            <!-- Rząd 5: dwie szerokie — okolica -->
+            <div class="gallery-cell gc-hero">
+                <div class="frame-line"></div>
+                <div class="gallery-cell-label">Widok na Lago d'Iseo</div>
+                <div class="gallery-cell-sub">300 metrów od apartamentu</div>
+            </div>
+            <div class="gallery-cell gc-tall">
+                <div class="gallery-cell-label">Ulica Borgonuovo</div>
+                <div class="gallery-cell-sub">Centrum Marone</div>
+            </div>
+
+            <!-- Rząd 6: trzy równe — dodatkowe -->
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Plaża nad jeziorem</div>
+                <div class="gallery-cell-sub">500 m spaceru</div>
+            </div>
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Port i promenada</div>
+                <div class="gallery-cell-sub">Marone</div>
+            </div>
+            <div class="gallery-cell gc-medium">
+                <div class="gallery-cell-label">Widok na Monte Isola</div>
+                <div class="gallery-cell-sub">Z brzegu jeziora</div>
+            </div>
+        </div>
+
+        <div class="gallery-footer">
+            <span class="gallery-footer-text">Pełny album zdjęć w wysokiej rozdzielczości — łącznie ponad 40 fotografii</span>
+            <span class="gallery-footer-count">18 / 40+</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── MARONE I OKOLICE ── -->
+<section id="marone">
+    <div class="section-inner">
+        <span class="label">Lokalizacja</span>
+        <h2 class="heading">Marone<br><em>i Okolice</em></h2>
+        <div class="rule"></div>
+        <p class="lead">Spokojna miejscowość nad Lago d'Iseo w Lombardii — z dala od tłoku, blisko wszystkiego co istotne.</p>
+
+        <div class="marone-grid">
+
+            <div>
+                <div class="dist-table">
+                    <div class="dist-row">
+                        <span class="dist-name">Jezioro Iseo</span>
+                        <span class="dist-val">300 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Stacja kolejowa Marone-Zone</span>
+                        <span class="dist-val">400 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Sklep Conad Express</span>
+                        <span class="dist-val">400 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Bar Caffè</span>
+                        <span class="dist-val">500 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Plaża</span>
+                        <span class="dist-val">500 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Kościół</span>
+                        <span class="dist-val">500 m</span>
+                    </div>
+                    <div class="dist-row">
+                        <span class="dist-name">Port Navigazione Lago d'Iseo</span>
+                        <span class="dist-val">w miejscowości</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="attr-grid">
+                <div class="attr-item">
+                    <div class="attr-item-label">Gastronomia</div>
+                    <div class="attr-item-text">Kilka barów, dwie pizzerie i restauracje serwujące kuchnię lombardzką.</div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-item-label">Żegluga</div>
+                    <div class="attr-item-text">Port Navigazione Lago d'Iseo — rejsy na Monte Isola i inne miejscowości.</div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-item-label">Usługi</div>
+                    <div class="attr-item-text">Sklepy, apteka, lodziarnia — wszystko w zasięgu pieszego spaceru.</div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-item-label">Przyroda</div>
+                    <div class="attr-item-text">Piramidy di Zone, Monte Isola — unikalne atrakcje w najbliższej okolicy.</div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-item-label">Kempingi</div>
+                    <div class="attr-item-text">Dwa kempingi nad jeziorem dla miłośników aktywnego wypoczynku.</div>
+                </div>
+                <div class="attr-item">
+                    <div class="attr-item-label">Komunikacja</div>
+                    <div class="attr-item-text">Pociąg do Brescia i Bergamo. Bliskość autostrad A4 i A35.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ── BLOG ── -->
+<section id="blog">
+    <div class="section-inner">
+        <span class="label">Nasze polecajki</span>
+        <h2 class="heading"><em>Blog</em></h2>
+        <div class="rule"></div>
+        <p class="lead">Tu rodzina Baron dzieli się ulubionymi miejscami, przepisami i wskazówkami dla gości odwiedzających Marone.</p>
+
+        <div class="blog-grid">
+            <div class="blog-card">
+                <div class="blog-img">
+                    <span class="blog-img-label">Zdjęcie do wpisu</span>
+                </div>
+                <div class="blog-body">
+                    <div class="blog-cat">Restauracje</div>
+                    <h3 class="blog-title">Nasze ulubione miejsca na kolację nad jeziorem</h3>
+                    <p class="blog-excerpt">Tu rodzina opisze swoje ulubione restauracje w Marone i okolicach — polecajki z prawdziwego życia, nie z przewodnika.</p>
+                    <div class="blog-meta">Rodzina Baron · Październik 2026</div>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">
+                    <span class="blog-img-label">Zdjęcie do wpisu</span>
+                </div>
+                <div class="blog-body">
+                    <div class="blog-cat">Atrakcje</div>
+                    <h3 class="blog-title">Rejs na Monte Isola — co wiedzieć przed wycieczką</h3>
+                    <p class="blog-excerpt">Praktyczny przewodnik po rejsie na największą wyspę jeziorną w Europie Środkowej.</p>
+                    <div class="blog-meta">Rodzina Baron · Wrzesień 2026</div>
+                </div>
+            </div>
+            <div class="blog-card">
+                <div class="blog-img">
+                    <span class="blog-img-label">Zdjęcie do wpisu</span>
+                </div>
+                <div class="blog-body">
+                    <div class="blog-cat">Natura</div>
+                    <h3 class="blog-title">Piramidy di Zone — niezwykła atrakcja tuż obok</h3>
+                    <p class="blog-excerpt">Unikalne formacje skalne widoczne z okolicy apartamentu. Jak tam dojść i co zabrać ze sobą.</p>
+                    <div class="blog-meta">Rodzina Baron · Sierpień 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-footer">
+            <a href="#" class="btn-outline">Wszystkie wpisy</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── KALENDARZ ── -->
+<section id="kalendarz">
+    <div class="section-inner">
+        <span class="label">Dostępność</span>
+        <h2 class="heading">Kalendarz<br><em>Rezerwacji</em></h2>
+        <div class="rule"></div>
+
+        <div class="cal-frame">
+            <div class="cal-corner tl"></div>
+            <div class="cal-corner tr"></div>
+            <div class="cal-corner bl"></div>
+            <div class="cal-corner br"></div>
+            <p class="cal-heading">Interaktywny kalendarz dostępności</p>
+            <p class="cal-sub">Tu zostanie osadzony system rezerwacji. Na razie prosimy o kontakt bezpośredni — odpowiemy w ciągu 24 godzin.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── KONTAKT ── -->
+<section id="kontakt">
+    <div class="section-inner">
+        <span class="label">Napisz do nas</span>
+        <h2 class="heading"><em>Kontakt</em></h2>
+        <div class="rule"></div>
+
+        <div class="kontakt-grid">
+
+            <div>
+                <p class="lead">Pytania, życzenia specjalne, informacje o dostępności — jesteśmy do dyspozycji.</p>
+
+                <div class="contact-info">
+                    <div class="contact-row">
+                        <div class="contact-row-label">Adres</div>
+                        <div class="contact-row-value">
+                            Via Borgonuovo, Marone (BS)<br>
+                            Lago d'Iseo, Lombardia, Włochy
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="contact-row-label">E-mail</div>
+                        <div class="contact-row-value">kontakt@casadibaron.com</div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="contact-row-label">Telefon</div>
+                        <div class="contact-row-value">
+                            +XX XXX XXX XXX
+                            <div class="contact-row-note">Do uzupełnienia · WhatsApp dostępny</div>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="contact-row-label">Platformy</div>
+                        <div class="contact-row-value">
+                            Airbnb · Booking.com
+                            <div class="contact-row-note">Linki do dodania</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form" onsubmit="return false;">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Imię i nazwisko</label>
+                        <input type="text" placeholder="Jan Kowalski">
+                    </div>
+                    <div class="form-field">
+                        <label>E-mail</label>
+                        <input type="email" placeholder="jan@przykład.pl">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Przyjazd</label>
+                        <input type="date">
+                    </div>
+                    <div class="form-field">
+                        <label>Wyjazd</label>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label>Liczba osób</label>
+                        <select>
+                            <option>1 – 2 osoby</option>
+                            <option>3 – 4 osoby</option>
+                            <option>5 – 6 osób</option>
+                            <option>7 osób</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label>Telefon / WhatsApp</label>
+                        <input type="tel" placeholder="+48 ...">
+                    </div>
+                </div>
+                <div class="form-field full">
+                    <label>Wiadomość</label>
+                    <textarea placeholder="Pytania, życzenia specjalne..."></textarea>
+                </div>
+                <button type="submit" class="form-submit">Wyślij zapytanie</button>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div>
+                <div class="footer-brand">Casa di Baron</div>
+                <p class="footer-tagline">
+                    Apartament nad Lago d'Iseo<br>
+                    Marone, Lombardia, Włochy
+                </p>
+            </div>
+            <div>
+                <div class="footer-col-title">Nawigacja</div>
+                <ul class="footer-links">
+                    <li><a href="#o-nas">O Nas</a></li>
+                    <li><a href="#o-apartamencie">O Apartamencie</a></li>
+                    <li><a href="#galeria">Galeria</a></li>
+                    <li><a href="#marone">Marone i Okolice</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#kalendarz">Rezerwacja</a></li>
+                    <li><a href="#kontakt">Kontakt</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-col-title">Informacje</div>
+                <ul class="footer-links">
+                    <li><a href="#">Regulamin</a></li>
+                    <li><a href="#">Polityka prywatności</a></li>
+                    <li><a href="#">Reguły rezerwacji</a></li>
+                    <li><a href="#">Cennik</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Casa di Baron</span>
+            <span><a href="#">casadibaron.com</a></span>
+        </div>
+    </div>
+</footer>
+
+<script>
+(function () {
+    var switcher = document.getElementById('langSwitcher');
+    var toggle = document.getElementById('langToggle');
+    var currentCode = document.getElementById('langCurrentCode');
+    var options = document.querySelectorAll('.lang-option');
+
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = switcher.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    options.forEach(function (option) {
+        option.addEventListener('click', function (e) {
+            e.stopPropagation();
+            options.forEach(function (o) { o.classList.remove('active'); });
+            option.classList.add('active');
+            currentCode.textContent = option.getAttribute('data-code');
+            switcher.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+            // Na razie to wyłącznie przełącznik wizualny — rzeczywiste
+            // tłumaczenie treści strony zostanie podpięte w kolejnym kroku.
+        });
+    });
+
+    document.addEventListener('click', function () {
+        switcher.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            switcher.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+})();
+</script>
+
+</body>
+</html>
